@@ -1,0 +1,31 @@
+experiment:
+  device: "cuda"  # or "cpu"
+
+seeds:
+  global: 12345
+  model: 12345
+  clustering: 12345
+  tsne: 12345
+
+data:
+  root: "data/processed/graphs"
+  homo: "homo.pt"
+  hetero_walk: "hetero_walk.pt"
+  hetero_multi: "hetero_multi.pt"
+
+model:
+  in_dim: 23  # Number of input features
+  hidden_dim: 8 # total hiddem dim will be hidden_dim * heads (concatenated)
+  out_dim: 16 # Embedding dimension (d=16)
+  heads: 4
+  dropout: 0.6
+  lambda_struct: 1.0
+
+training:
+  lr: 0.005
+  epochs: 5000
+  early_stopping_patience: 100
+  neg_sampling_ratio: 1.0
+
+clustering:
+  n_clusters: 8  # Need to determine appropriate K, or maybe make it a list to try

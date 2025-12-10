@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use this case study, please cite the dataset (and the accompanying paper)."
+title: "Case Study Data for City2Graph: Clustering Urban Functions in Liverpool"
+authors:
+  - family-names: Sato
+    given-names: Yuta
+type: dataset
+year: 2026
+doi: 10.5281/zenodo.18396285
+url: "https://doi.org/10.5281/zenodo.18396285"
+repository-code: "https://github.com/c2g-dev/city2graph-case-study"
+license: BSD-3-Clause

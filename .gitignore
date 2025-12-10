@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+.DS_Store
+.vscode/
+.python-version
+
+# Generated notebook/tile cache
+**/cache/
+
+# Ignore data content but keep structure
+data/**/*
+!data/**/
+!data/**/.gitkeep
+
+data_v1/
+data_v2/
