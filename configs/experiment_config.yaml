@@ -1,0 +1,33 @@
+experiment:
+  # seed: 42  <-- REMOVED
+  device: "cuda"  # or "cpu"
+
+seeds:
+  global: 42
+  model: 42
+  clustering: 42
+  tsne: 42
+
+data:
+  root: "data/processed/graphs"
+  homo: "homo.pt"
+  hetero_street: "hetero_street.pt"
+  hetero_multi: "hetero_multi.pt"
+
+model:
+  in_dim: 23  # Number of input features
+  hidden_dim: 16
+  out_dim: 16 # Embedding dimension (d=16)
+  heads: 4
+  dropout: 0.3
+  lambda_struct: 0.2
+
+training:
+  lr: 0.001
+  weight_decay: 0.0001
+  epochs: 5000
+  early_stopping_patience: 100
+  negative_sampling_scale: 1.0
+
+clustering:
+  n_clusters: 8  # Need to determine appropriate K, or maybe make it a list to try

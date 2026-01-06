@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.DS_Store
+
+# Ignore data content but keep structure
+data/**/*
+!data/**/
+!data/**/.gitkeep.python-version
