@@ -11,23 +11,22 @@ seeds:
 data:
   root: "data/processed/graphs"
   homo: "homo.pt"
-  hetero_street: "hetero_street.pt"
+  hetero_walk: "hetero_walk.pt"
   hetero_multi: "hetero_multi.pt"
 
 model:
   in_dim: 23  # Number of input features
-  hidden_dim: 16
+  hidden_dim: 32
   out_dim: 16 # Embedding dimension (d=16)
   heads: 4
-  dropout: 0.3
-  lambda_struct: 0.2
+  dropout: 0.5
+  lambda_struct: 1.0
 
 training:
   lr: 0.001
-  weight_decay: 0.0001
   epochs: 5000
-  early_stopping_patience: 100
-  negative_sampling_scale: 1.0
+  early_stopping_patience: 50
+  neg_sampling_ratio: 1.0
 
 clustering:
   n_clusters: 8  # Need to determine appropriate K, or maybe make it a list to try
