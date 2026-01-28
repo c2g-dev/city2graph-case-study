@@ -137,23 +137,27 @@ class HANGAE(nn.Module):
         for param in self.struct_decoders.values():
             nn.init.xavier_uniform_(param.unsqueeze(0))
 
-    def encode(self, x: torch.Tensor, hetero_data: HeteroData) -> tuple[torch.Tensor, torch.Tensor]:
+    def encode(
+        self, x: torch.Tensor, hetero_data: HeteroData
+    ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         # Layer 1
-        h, _ = self.han1(x, hetero_data)
+        h, beta1 = self.han1(x, hetero_data)
         h = F.dropout(h, p=self.dropout, training=self.training)
         
         # Layer 2 (Extract beta for explainability)
-        z, beta = self.han2(h, hetero_data)
-        return z, beta
+        z, beta2 = self.han2(h, hetero_data)
+        return z, beta1, beta2
 
     def decode(self, z: torch.Tensor) -> torch.Tensor:
         """Decodes the latent representation back to the original feature space."""
         return self.feat_decoder(z)
 
-    def forward(self, hetero_data: HeteroData) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
-        z, beta = self.encode(hetero_data['oa'].x, hetero_data)
+    def forward(
+        self, hetero_data: HeteroData
+    ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
+        z, beta1, beta2 = self.encode(hetero_data['oa'].x, hetero_data)
         x_hat = self.decode(z)
-        return z, x_hat, beta
+        return z, x_hat, beta1, beta2
 
     def compute_loss(
         self, 
@@ -161,7 +165,7 @@ class HANGAE(nn.Module):
         lambda_struct: float = 1.0, 
         neg_sampling_ratio: float = 1.0
     ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
-        z, x_hat, _ = self.forward(data)
+        z, x_hat, _, _ = self.forward(data)
 
         # 1. Feature Loss
         l_feat = F.smooth_l1_loss(x_hat, data['oa'].x)
