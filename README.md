@@ -1,5 +1,5 @@
 # Case Study for City2Graph
-Liverpool case study for City2Graph.
+Liverpool case study for [City2Graph](https://github.com/c2g-dev/city2graph).
 
 <p align="center">
   <img width="100%" alt="Case Study of City2Graph" src="https://github.com/user-attachments/assets/a824428c-11ab-4e8c-88a7-4474f704f866" />
