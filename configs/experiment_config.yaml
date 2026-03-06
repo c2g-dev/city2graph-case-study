@@ -18,8 +18,8 @@ model:
   in_dim: 23  # Number of input features
   hidden_dim: 32
   out_dim: 16 # Embedding dimension (d=16)
-  heads: 4
-  dropout: 0.5
+  heads: 8
+  dropout: 0.6
   lambda_struct: 1.0
 
 training:

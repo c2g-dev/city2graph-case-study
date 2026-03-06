@@ -107,11 +107,15 @@ class HANGAE(nn.Module):
         metapaths: list[str], 
         heads: int = 4, 
         dropout: float = 0.3, 
-        edge_dim_dict: dict[str, int] | None = None
+        edge_dim_dict: dict[str, int] | None = None,
+        use_features: bool = True,
+        num_nodes: int = 0
     ):
         super().__init__()
         self.metapaths = metapaths
         self.dropout = dropout
+        self.use_features = use_features
+        self.in_dim = in_dim
 
         # Encoder: 2-Layer HAN
         # Layer 1: Expands features, learning high-level concepts
@@ -120,13 +124,14 @@ class HANGAE(nn.Module):
         # Layer 2: Compresses features, refining the latent space
         self.han2 = HANLayer(hidden_dim, out_dim, metapaths, heads=1, dropout=dropout, edge_dim_dict=edge_dim_dict)
 
-        # Feature Decoder
-        self.feat_decoder = nn.Sequential(
-            nn.Linear(out_dim, hidden_dim),
-            nn.ELU(),
-            nn.Dropout(dropout),
-            nn.Linear(hidden_dim, in_dim)
-        )
+        # Feature Decoder (only needed when using features)
+        if use_features:
+            self.feat_decoder = nn.Sequential(
+                nn.Linear(out_dim, hidden_dim),
+                nn.ELU(),
+                nn.Dropout(dropout),
+                nn.Linear(hidden_dim, in_dim)
+            )
 
         # Structure Decoders (One per meta-path)
         # We need separate DistMult vectors because 'connectivity' means different
@@ -148,14 +153,20 @@ class HANGAE(nn.Module):
         z, beta2 = self.han2(h, hetero_data)
         return z, beta1, beta2
 
-    def decode(self, z: torch.Tensor) -> torch.Tensor:
+    def decode(self, z: torch.Tensor) -> torch.Tensor | None:
         """Decodes the latent representation back to the original feature space."""
-        return self.feat_decoder(z)
+        if self.use_features:
+            return self.feat_decoder(z)
+        return None
 
     def forward(
         self, hetero_data: HeteroData
-    ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
-        z, beta1, beta2 = self.encode(hetero_data['oa'].x, hetero_data)
+    ) -> tuple[torch.Tensor, torch.Tensor | None, torch.Tensor, torch.Tensor]:
+        if self.use_features:
+            x = hetero_data['oa'].x
+        else:
+            x = torch.ones(hetero_data['oa'].num_nodes, self.in_dim, device=hetero_data['oa'].x.device)
+        z, beta1, beta2 = self.encode(x, hetero_data)
         x_hat = self.decode(z)
         return z, x_hat, beta1, beta2
 
@@ -167,8 +178,11 @@ class HANGAE(nn.Module):
     ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         z, x_hat, _, _ = self.forward(data)
 
-        # 1. Feature Loss
-        l_feat = F.smooth_l1_loss(x_hat, data['oa'].x)
+        # 1. Feature Loss — skipped in structure-only mode
+        if self.use_features:
+            l_feat = F.smooth_l1_loss(x_hat, data['oa'].x)
+        else:
+            l_feat = torch.tensor(0.0, device=z.device)
 
         # 2. Structure Loss (Averaged over all meta-paths)
         l_struct_total = 0
@@ -182,4 +196,7 @@ class HANGAE(nn.Module):
         # Standardize loss to be independent of number of metapaths
         l_struct_mean = l_struct_total / len(self.metapaths)
 
-        return l_feat + lambda_struct * l_struct_mean, l_feat, l_struct_mean
+        if self.use_features:
+            return l_feat + lambda_struct * l_struct_mean, l_feat, l_struct_mean
+        else:
+            return l_struct_mean, l_feat, l_struct_mean

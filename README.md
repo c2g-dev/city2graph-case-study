@@ -38,6 +38,7 @@ city2graph-case-study
 │   ├── 02_graph_construction.ipynb
 │   ├── 03_model_training.ipynb
 │   ├── 04_evaluation.ipynb
+│   ├── 04b_evaluation_hdbscan.ipynb
 │   └── 05_visualization.ipynb
 ├── notebooks_samples
 │   ├── data

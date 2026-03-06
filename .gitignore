@@ -7,3 +7,6 @@ __pycache__/
 data/**/*
 !data/**/
 !data/**/.gitkeep
+
+data_v1/
+data_v2/

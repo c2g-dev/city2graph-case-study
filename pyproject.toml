@@ -3,15 +3,17 @@ name = "city2graph-case-study"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.12"
 dependencies = [
-    "city2graph[cpu]==0.2.3",
+    "city2graph[cpu]==0.2.4",
     "contextily>=1.7.0",
     "geopandas>=1.1.1",
+    "hdbscan>=0.8.41",
     "ipykernel>=7.1.0",
     "jupyter>=1.1.1",
     "mapclassify>=2.10.0",
     "matplotlib>=3.10.7",
+    "matplotlib-scalebar>=0.9.0",
     "networkx>=3.4.2",
     "numpy>=2.2.6",
     "pandas>=2.3.3",
@@ -19,6 +21,10 @@ dependencies = [
     "scikit-learn>=1.7.2",
     "seaborn>=0.13.2",
     "splot>=1.1.7",
+    "torch>=2.9.1",
+    "torch-geometric>=2.7.0",
+    "torchaudio>=2.9.1",
+    "torchvision>=0.24.1",
 ]
 
 [dependency-groups]

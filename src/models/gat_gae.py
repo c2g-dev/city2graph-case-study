@@ -22,25 +22,30 @@ class GATGAE(nn.Module):
         out_dim: int, 
         heads: int = 4, 
         dropout: float = 0.3, 
-        edge_dim: int = 1
+        edge_dim: int = 1,
+        use_features: bool = True,
+        num_nodes: int = 0
     ):
         super().__init__()
         self.dropout = dropout
+        self.use_features = use_features
+        self.in_dim = in_dim
 
         # Encoder: 2-layer GAT
         # Layer 1: Learns local feature aggregation
-        self.conv1 = GATConv(in_dim, hidden_dim, heads=heads, concat=True, dropout=dropout, edge_dim=edge_dim)
+        self.conv1 = GATConv(in_dim, hidden_dim, heads=heads, concat=False, dropout=dropout, edge_dim=edge_dim)
 
         # Layer 2: Compresses to latent dimension 'out_dim'
-        self.conv2 = GATConv(hidden_dim * heads, out_dim, heads=1, concat=False, dropout=dropout, edge_dim=edge_dim)
+        self.conv2 = GATConv(hidden_dim, out_dim, heads=1, concat=False, dropout=dropout, edge_dim=edge_dim)
 
-        # Feature Decoder: MLP
-        self.feat_decoder = nn.Sequential(
-            nn.Linear(out_dim, hidden_dim),
-            nn.ELU(),
-            nn.Dropout(dropout),
-            nn.Linear(hidden_dim, in_dim)
-        )
+        # Feature Decoder: MLP (only needed when using features)
+        if use_features:
+            self.feat_decoder = nn.Sequential(
+                nn.Linear(out_dim, hidden_dim),
+                nn.ELU(),
+                nn.Dropout(dropout),
+                nn.Linear(hidden_dim, in_dim)
+            )
 
         # Structure Decoder: Learnable Diagonal for DistMult
         # A single relation vector because this model only sees 'contiguity'
@@ -63,12 +68,18 @@ class GATGAE(nn.Module):
         z = self.conv2(x, edge_index, edge_attr=edge_attr)
         return z
 
-    def decode(self, z: torch.Tensor) -> torch.Tensor:
+    def decode(self, z: torch.Tensor) -> torch.Tensor | None:
         """Decodes the latent representation back to the original feature space."""
-        return self.feat_decoder(z)
+        if self.use_features:
+            return self.feat_decoder(z)
+        return None
 
-    def forward(self, data: Data) -> tuple[torch.Tensor, torch.Tensor]:
-        z = self.encode(data.x, data.edge_index, edge_attr=data.edge_attr)
+    def forward(self, data: Data) -> tuple[torch.Tensor, torch.Tensor | None]:
+        if self.use_features:
+            x = data.x
+        else:
+            x = torch.ones(data.num_nodes, self.in_dim, device=data.x.device)
+        z = self.encode(x, data.edge_index, edge_attr=data.edge_attr)
         x_hat = self.decode(z)
         return z, x_hat
 
@@ -80,10 +91,16 @@ class GATGAE(nn.Module):
     ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         z, x_hat = self.forward(data)
 
-        # 1. Feature Loss (SmoothL1)
-        l_feat = F.smooth_l1_loss(x_hat, data.x)
+        # 1. Feature Loss (SmoothL1) — skipped in structure-only mode
+        if self.use_features:
+            l_feat = F.smooth_l1_loss(x_hat, data.x)
+        else:
+            l_feat = torch.tensor(0.0, device=z.device)
 
         # 2. Structure Loss (BCE with Negative Sampling)
         l_struct = structure_loss_distmult(z, data.edge_index, self.struct_decoder_rel, neg_sampling_ratio=neg_sampling_ratio)
 
-        return l_feat + lambda_struct * l_struct, l_feat, l_struct
+        if self.use_features:
+            return l_feat + lambda_struct * l_struct, l_feat, l_struct
+        else:
+            return l_struct, l_feat, l_struct
