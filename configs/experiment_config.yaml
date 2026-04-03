@@ -16,16 +16,16 @@ data:
 
 model:
   in_dim: 23  # Number of input features
-  hidden_dim: 32
+  hidden_dim: 8 # total hiddem dim will be hidden_dim * heads (concatenated)
   out_dim: 16 # Embedding dimension (d=16)
-  heads: 8
+  heads: 4
   dropout: 0.6
   lambda_struct: 1.0
 
 training:
-  lr: 0.001
+  lr: 0.005
   epochs: 5000
-  early_stopping_patience: 50
+  early_stopping_patience: 100
   neg_sampling_ratio: 1.0
 
 clustering:

@@ -26,16 +26,17 @@ class HANLayer(nn.Module):
         self.metapaths = metapaths
         self.dropout = dropout
         self.edge_dim_dict = edge_dim_dict or {}
+        self.heads = heads
+        self.gat_out_dim = out_dim * heads
 
         # 1. Node-Level Attention: One GAT per meta-path
         self.gat_layers = nn.ModuleDict()
         for mp in metapaths:
             edge_dim = self.edge_dim_dict.get(mp, None)
-            # Note: concat=False reduces output dimension to `out_dim` (averaging heads),
-            # which simplifies semantic attention projection.
+            # Use head-wise concatenation so each head contributes distinct features.
             self.gat_layers[mp] = GATConv(
                 in_dim, out_dim, heads=heads,
-                concat=False, dropout=dropout, edge_dim=edge_dim
+                concat=True, dropout=dropout, edge_dim=edge_dim
             )
 
         # Edge Normalization: One BN per meta-path
@@ -47,8 +48,8 @@ class HANLayer(nn.Module):
 
         # 2. Semantic-Level Attention Components
         # Projects all meta-path embeddings to a common space to measure importance
-        self.semantic_proj = nn.Linear(out_dim, out_dim)
-        self.semantic_attn_vec = nn.Parameter(torch.Tensor(1, out_dim))
+        self.semantic_proj = nn.Linear(self.gat_out_dim, self.gat_out_dim)
+        self.semantic_attn_vec = nn.Parameter(torch.Tensor(1, self.gat_out_dim))
         nn.init.xavier_uniform_(self.semantic_attn_vec)
 
     def forward(self, x: torch.Tensor, hetero_data: HeteroData) -> tuple[torch.Tensor, torch.Tensor]:
@@ -72,7 +73,7 @@ class HANLayer(nn.Module):
             z_mp = F.elu(z_mp)
             semantic_embeddings.append(z_mp)
 
-        # Stack: [N, Num_Metapaths, Out_Dim]
+        # Stack: [N, Num_Metapaths, Out_Dim * Heads]
         z_stack = torch.stack(semantic_embeddings, dim=1)
 
         # Step 2: Semantic Attention Mechanism
@@ -106,7 +107,7 @@ class HANGAE(nn.Module):
         out_dim: int, 
         metapaths: list[str], 
         heads: int = 4, 
-        dropout: float = 0.3, 
+        dropout: float = 0.6, 
         edge_dim_dict: dict[str, int] | None = None,
         use_features: bool = True,
         num_nodes: int = 0
@@ -122,14 +123,13 @@ class HANGAE(nn.Module):
         self.han1 = HANLayer(in_dim, hidden_dim, metapaths, heads, dropout, edge_dim_dict)
         
         # Layer 2: Compresses features, refining the latent space
-        self.han2 = HANLayer(hidden_dim, out_dim, metapaths, heads=1, dropout=dropout, edge_dim_dict=edge_dim_dict)
+        self.han2 = HANLayer(hidden_dim * heads, out_dim, metapaths, heads=1, dropout=dropout, edge_dim_dict=edge_dim_dict)
 
         # Feature Decoder (only needed when using features)
         if use_features:
             self.feat_decoder = nn.Sequential(
                 nn.Linear(out_dim, hidden_dim),
                 nn.ELU(),
-                nn.Dropout(dropout),
                 nn.Linear(hidden_dim, in_dim)
             )
 
@@ -147,6 +147,7 @@ class HANGAE(nn.Module):
     ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         # Layer 1
         h, beta1 = self.han1(x, hetero_data)
+        # Keep one explicit feature-dropout point between encoder layers.
         h = F.dropout(h, p=self.dropout, training=self.training)
         
         # Layer 2 (Extract beta for explainability)

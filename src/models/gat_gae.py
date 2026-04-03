@@ -21,7 +21,7 @@ class GATGAE(nn.Module):
         hidden_dim: int, 
         out_dim: int, 
         heads: int = 4, 
-        dropout: float = 0.3, 
+        dropout: float = 0.6, 
         edge_dim: int = 1,
         use_features: bool = True,
         num_nodes: int = 0
@@ -33,17 +33,16 @@ class GATGAE(nn.Module):
 
         # Encoder: 2-layer GAT
         # Layer 1: Learns local feature aggregation
-        self.conv1 = GATConv(in_dim, hidden_dim, heads=heads, concat=False, dropout=dropout, edge_dim=edge_dim)
+        self.conv1 = GATConv(in_dim, hidden_dim, heads=heads, concat=True, dropout=dropout, edge_dim=edge_dim)
 
         # Layer 2: Compresses to latent dimension 'out_dim'
-        self.conv2 = GATConv(hidden_dim, out_dim, heads=1, concat=False, dropout=dropout, edge_dim=edge_dim)
+        self.conv2 = GATConv(hidden_dim * heads, out_dim, heads=1, concat=True, dropout=dropout, edge_dim=edge_dim)
 
         # Feature Decoder: MLP (only needed when using features)
         if use_features:
             self.feat_decoder = nn.Sequential(
                 nn.Linear(out_dim, hidden_dim),
                 nn.ELU(),
-                nn.Dropout(dropout),
                 nn.Linear(hidden_dim, in_dim)
             )
 
@@ -61,9 +60,9 @@ class GATGAE(nn.Module):
         edge_attr = self.edge_norm(torch.log1p(edge_attr))
 
         # 2. GAT Encoder
-        x = F.dropout(x, p=self.dropout, training=self.training)
         x = self.conv1(x, edge_index, edge_attr=edge_attr)
         x = F.elu(x)
+        # Keep one explicit feature-dropout point between encoder layers.
         x = F.dropout(x, p=self.dropout, training=self.training)
         z = self.conv2(x, edge_index, edge_attr=edge_attr)
         return z
