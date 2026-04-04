@@ -18,7 +18,6 @@ city2graph-case-study
 ├── configs
 │   └── experiment_config.yaml
 ├── data
-│   ├── .gitkeep
 │   ├── outputs
 │   │   ├── checkpoints
 │   │   ├── clusters
@@ -38,14 +37,14 @@ city2graph-case-study
 │   ├── 02_graph_construction.ipynb
 │   ├── 03_model_training.ipynb
 │   ├── 04_evaluation.ipynb
-│   ├── 04b_evaluation_hdbscan.ipynb
-│   └── 05_visualization.ipynb
+│   ├── 05_visualization.ipynb
+│   └── appendix_evaluation_hdbscan.ipynb
 ├── notebooks_samples
 │   ├── data
 │   ├── morphology.ipynb
-│   ├── morphology_combined.png
-│   ├── morphology_graph.png
-│   ├── morphology_steps.png
+│   ├── morphology_combined.jpg
+│   ├── morphology_graph.jpg
+│   ├── morphology_steps.jpg
 │   └── transportation_mobility.ipynb
 ├── pyproject.toml
 ├── src
@@ -57,7 +56,6 @@ city2graph-case-study
 │       ├── gat_gae.py
 │       ├── han_gae.py
 │       └── utils.py
-├── tests
 └── uv.lock
 ```
 
@@ -135,6 +133,54 @@ Download the Zenodo archive and unzip it to the repository root so the `data/` d
 ## Outputs
 Results (embeddings, clusters, tables, and figures) are written under data/outputs/.
 
+## Reproducibility note
+This case study uses uv for dependency management and environment reproducibility.
+
+- Dependency specification: `pyproject.toml`
+- Resolved, reproducible lockfile: `uv.lock`
+- Python version pin: `.python-version` (3.12.8)
+
+To reproduce the exact environment from this repository:
+
+```bash
+uv sync
+```
+
+To verify installed package versions in the uv environment:
+
+```bash
+uv run python - <<'PY'
+from importlib.metadata import version
+
+packages = [
+  "city2graph",
+  "contextily",
+  "geopandas",
+  "hdbscan",
+  "ipykernel",
+  "jupyter",
+  "mapclassify",
+  "matplotlib",
+  "matplotlib-scalebar",
+  "networkx",
+  "numpy",
+  "pandas",
+  "PyYAML",
+  "scikit-learn",
+  "seaborn",
+  "splot",
+  "torch",
+  "torch-geometric",
+  "torchaudio",
+  "torchvision",
+]
+
+for pkg in packages:
+  print(f"{pkg}=={version(pkg)}")
+PY
+```
+
+This case study was run on a CPU of Apple M2 (ARM) with 16 GB RAM, and CUDA was not used.
 
 ## Data sources and copyright
 
