@@ -82,7 +82,7 @@ Download the Zenodo archive and unzip it to the repository root so the `data/` d
 </p>
 
 
-2. Run [notebooks/02_graph_construction.ipynb](notebooks/02_graph_construction.ipynb) (Google Colab: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1RStJI9xq6iDM7zz7_MQ18BgUmXHex7gB))
+2. Run [notebooks/02_graph_construction.ipynb](notebooks/02_graph_construction.ipynb) / [noteboosk/05_visualization.ipynb](https://github.com/c2g-dev/city2graph-case-study/blob/main/notebooks/05_visualization.ipynb) (Google Colab: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1RStJI9xq6iDM7zz7_MQ18BgUmXHex7gB) / [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1t1fNdsKNFMH1BdmEKt7HUwN6pCQNgr8w))
 
 <p align="center">
   <img width="100%" alt="fig9_liverpool_contig" src="https://github.com/user-attachments/assets/60962e17-fa11-405f-9cbe-536411bd43e3" />
@@ -97,38 +97,48 @@ Download the Zenodo archive and unzip it to the repository root so the `data/` d
 <table align="center">
   <tr>
     <td>
-      <img width="100%" alt="image" src="https://github.com/user-attachments/assets/f1ce994b-d871-4bc9-887e-7d721ec0537d" />
+      <img width="100%" alt="model-1" src="https://github.com/user-attachments/assets/779423ae-a68f-40df-8264-a5124a3b28c5" />
     </td>
     <td>
-      <img width="100%" alt="image" src="https://github.com/user-attachments/assets/c302cf99-2d32-4ffa-9a3e-a77c246fd9c2" />
+      <img width="100%" alt="model-2" src="https://github.com/user-attachments/assets/5a603cf9-8b6a-49d1-adf8-2f4f96d27874" />
+    </td>
+    <td>
+      <img width="100%" alt="model-3" src="https://github.com/user-attachments/assets/31102c1d-704e-4339-8845-b62c11a61575" />
+    </td>
+    <td>
+      <img width="100%" alt="model-4" src="https://github.com/user-attachments/assets/ac1911ec-3964-41f9-ba2b-ccc9e385bf0c" />
     </td>
   </tr>
   <tr>
     <td>
-      <img width="100%" alt="image" src="https://github.com/user-attachments/assets/74e5ef1b-3db8-4d85-91fe-213ed63513fd" />
+      <img width="100%" alt="model-1s" src="https://github.com/user-attachments/assets/243b56c8-ec43-4b2e-9e22-7ba4423f6488" />      
     </td>
     <td>
-      <img width="100%" alt="image" src="https://github.com/user-attachments/assets/19997e97-9757-44d0-a8c7-3a8e7e4b3557" />
+      <img width="100%" alt="model-2s" src="https://github.com/user-attachments/assets/ac7ce3f6-9c06-4b75-bb0b-5a3f7e4f6f6f" />
+    </td>
+    <td>
+      <img width="100%" alt="model-3s" src="https://github.com/user-attachments/assets/118de576-1a26-484d-a1a6-74a35959299b" />
+    </td>
+    <td>
+      <img width="100%" alt="model-4s" src="https://github.com/user-attachments/assets/a6245c48-833d-49a8-a608-b254e2023157" />
     </td>
   </tr>
 </table>
 
-
 4. Run [notebooks/04_evaluation.ipynb](notebooks/04_evaluation.ipynb) (Google Colab: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1EMissX0vP7_THWnmn9tW-qakIpdJ3T7k))
 
-<p align="center">
-  <img width="100%" alt="fig13-1_cluster_maps" src="https://github.com/user-attachments/assets/297097b8-aba8-480e-8190-e146923df9d7" />
-</p>
+<table align="center">
+  <tr>
+    <img width="100%" alt="clusters" src="https://github.com/user-attachments/assets/5d47a7db-311f-46dc-8512-2d6645fd8b1a" />
+  </tr>
+  <tr>
+    <img width="100%" alt="similarity" src="https://github.com/user-attachments/assets/4b6d86b6-4514-4d9d-a430-8f313209607a" />
+  </tr>
+</table>
 
 <p align="center">
-  <img width="100%" alt="fig13-2_cluster_maps_similarity" src="https://github.com/user-attachments/assets/93f9053a-bc96-4683-b826-daaf6afd2faa" />
+  <img width="100%" alt="isochrones" src="https://github.com/user-attachments/assets/6658788a-ab6a-4e59-9033-134d0322edc6" />
 </p>
-
-
-<p align="center">
-  <img width="100%" alt="fig14_isochrones" src="https://github.com/user-attachments/assets/b3c77b90-b177-498a-af35-7206d38e1329" />
-</p>
-
 
 ## Outputs
 Results (embeddings, clusters, tables, and figures) are written under data/outputs/.
