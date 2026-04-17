@@ -12,8 +12,6 @@ Liverpool case study for [City2Graph](https://github.com/c2g-dev/city2graph).
 city2graph-case-study
 ├── .gitignore
 ├── .python-version
-├── .vscode
-│   └── settings.json
 ├── README.md
 ├── configs
 │   └── experiment_config.yaml
@@ -74,7 +72,7 @@ Download the Zenodo archive and unzip it to the repository root so the `data/` d
 ## Quickstart (notebooks)
 
 0. Prepare for the data in [data/](data)
-1. Run [notebooks/01_data_processing.ipynb](notebooks/01_data_processing.ipynb) (Google Colab: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1O2mHzH3JPbteL0mW63vetmFCcO45gjA4))
+1. Run [notebooks/01_data_processing.ipynb](notebooks/01_data_processing.ipynb)
 
 <p align="center">
   <img width="366.1" height="520" alt="fig8-1_land_use" src="https://github.com/user-attachments/assets/fe60a629-f022-4a42-a5d1-63cc38b4c406" />
@@ -82,7 +80,7 @@ Download the Zenodo archive and unzip it to the repository root so the `data/` d
 </p>
 
 
-2. Run [notebooks/02_graph_construction.ipynb](notebooks/02_graph_construction.ipynb) / [noteboosk/05_visualization.ipynb](https://github.com/c2g-dev/city2graph-case-study/blob/main/notebooks/05_visualization.ipynb) (Google Colab: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1RStJI9xq6iDM7zz7_MQ18BgUmXHex7gB) / [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1t1fNdsKNFMH1BdmEKt7HUwN6pCQNgr8w))
+2. Run [notebooks/02_graph_construction.ipynb](notebooks/02_graph_construction.ipynb) / [noteboosk/05_visualization.ipynb](https://github.com/c2g-dev/city2graph-case-study/blob/main/notebooks/05_visualization.ipynb)
 
 <p align="center">
   <img width="100%" alt="fig9_liverpool_contig" src="https://github.com/user-attachments/assets/60962e17-fa11-405f-9cbe-536411bd43e3" />
@@ -92,7 +90,7 @@ Download the Zenodo archive and unzip it to the repository root so the `data/` d
 </p>
 
 
-3. Run [notebooks/03_model_training.ipynb](notebooks/03_model_training.ipynb) (Google Colab: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1ogAv8XrzzlTB1L49wfgd0TmSVquJKLL6))
+3. Run [notebooks/03_model_training.ipynb](notebooks/03_model_training.ipynb)
 
 <table align="center">
   <tr>
@@ -125,7 +123,7 @@ Download the Zenodo archive and unzip it to the repository root so the `data/` d
   </tr>
 </table>
 
-4. Run [notebooks/04_evaluation.ipynb](notebooks/04_evaluation.ipynb) (Google Colab: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1EMissX0vP7_THWnmn9tW-qakIpdJ3T7k))
+4. Run [notebooks/04_evaluation.ipynb](notebooks/04_evaluation.ipynb)
 
 <table align="center">
   <tr>
