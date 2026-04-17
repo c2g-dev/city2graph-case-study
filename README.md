@@ -10,9 +10,6 @@ Liverpool case study for [City2Graph](https://github.com/c2g-dev/city2graph).
 
 ```
 city2graph-case-study
-├── .gitignore
-├── .python-version
-├── README.md
 ├── configs
 │   └── experiment_config.yaml
 ├── data
@@ -44,7 +41,6 @@ city2graph-case-study
 │   ├── morphology_graph.jpg
 │   ├── morphology_steps.jpg
 │   └── transportation_mobility.ipynb
-├── pyproject.toml
 ├── src
 │   ├── baselines
 │   │   ├── __init__.py
@@ -54,7 +50,11 @@ city2graph-case-study
 │       ├── gat_gae.py
 │       ├── han_gae.py
 │       └── utils.py
-└── uv.lock
+├── pyproject.toml
+├── uv.lock
+├── .gitignore
+├── .python-version
+└── README.md
 ```
 
 ## Data (Zenodo)
