@@ -1,6 +1,30 @@
 # Case Study for City2Graph
 Liverpool case study for [City2Graph](https://github.com/c2g-dev/city2graph).
 
+## Paper
+
+<p align="center">
+  <a href="https://doi.org/10.1016/j.compenvurbsys.2026.102492">
+    <img width="100%" alt="City2Graph paper published in Computers, Environment and Urban Systems" src="docs/images/CEUS_thumbnail.jpg" />
+  </a>
+</p>
+
+Sato, Y., Pietrostefani, E., Mahabir, R., & Arribas-Bel, D. (2026). City2Graph: A Python library for Heterogeneous Graph Neural Networks and spatial analysis in urban systems. *Computers, Environment and Urban Systems*, 130, 102492. [https://doi.org/10.1016/j.compenvurbsys.2026.102492](https://doi.org/10.1016/j.compenvurbsys.2026.102492)
+
+```bibtex
+@article{sato2026city2graph,
+  title   = {City2Graph: A Python library for Heterogeneous Graph Neural Networks and spatial analysis in urban systems},
+  author  = {Sato, Yuta and Pietrostefani, Elisabetta and Mahabir, Ron and Arribas-Bel, Daniel},
+  journal = {Computers, Environment and Urban Systems},
+  volume  = {130},
+  pages   = {102492},
+  year    = {2026},
+  issn    = {0198-9715},
+  doi     = {10.1016/j.compenvurbsys.2026.102492},
+  url     = {https://www.sciencedirect.com/science/article/pii/S0198971526000943},
+}
+```
+
 <p align="center">
   <img width="100%" alt="Case Study of City2Graph" src="https://github.com/user-attachments/assets/f4a95dca-2877-495f-8ebb-c5651492d8a0" />
 </p>
@@ -184,7 +208,7 @@ This case study was run on a CPU of Apple M2 (ARM) with 16 GB RAM, and CUDA was 
 The third-party input data redistributed in the Zenodo archive remains under the licenses and attribution terms listed in [Data sources and copyright](#data-sources-and-copyright).
 
 ## Citation
-If you use this case study, please cite both the paper and the dataset:
+If you use this case study, please cite both the [paper](#paper) and the dataset:
 
 ```bibtex
 @misc{sato2026city2graph_casestudy_data,
